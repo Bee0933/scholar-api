@@ -18,6 +18,16 @@ session = Session(bind=engine)
 @auth_router.post('/sign-in', status_code=status.HTTP_201_CREATED)
 async def sigin(user:signUser):
 
+      """
+        ## Sign-in a user
+        This requires the following
+        ```
+                username:int
+                email:EmailStr
+                password1:str
+                password2:str
+        ```
+    """
       # query db if email exists 
       db_email = session.query(User).filter(User.email==user.email).first()
       
@@ -52,6 +62,15 @@ async def sigin(user:signUser):
 @auth_router.post('/log-in')
 async def login(user : logUser, Authorize:AuthJWT=Depends()):
       
+      """
+        ## Sign-in a user
+        This requires the following
+        ```
+                username:str
+                email:EmailStr
+                password:str   
+        ```
+      """
       # query db if user exists
       db_user = session.query(User).filter(User.email == user.email).first()
 
@@ -77,6 +96,10 @@ async def login(user : logUser, Authorize:AuthJWT=Depends()):
 @auth_router.get('/refresh', status_code=status.HTTP_201_CREATED)
 async def refresh(Authorize:AuthJWT=Depends()):
       
+      """
+      ## Create a new token
+      This creates a new token. It requires a refresh token from login.
+      """
       try:
             # request access token from authorized user
             Authorize.jwt_refresh_token_required()

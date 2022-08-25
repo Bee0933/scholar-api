@@ -21,6 +21,20 @@ crawler_router = APIRouter(
 # crawl route
 @crawler_router.get('/crawl' ,status_code=status.HTTP_200_OK)
 async def crawl(crawl_values: crawlInput, Authorize: AuthJWT=Depends()): 
+      
+      """
+        ## crawl google scholar 
+        This requires the following
+        ```
+                keyword:str
+                no_of_article:int
+                allow_links:bool
+                allow_authors:bool
+                allow_summary:bool
+        ```
+        It also requires an access token from login.
+      """
+      
       try:
             # request access token from authorized user
             Authorize.jwt_required()
@@ -51,6 +65,11 @@ async def crawl(crawl_values: crawlInput, Authorize: AuthJWT=Depends()):
 # history route 
 @crawler_router.get('/history' ,status_code=status.HTTP_200_OK)
 async def history(Authorize: AuthJWT=Depends()): 
+
+      """
+      ## user crawl history
+      This queries a users crawl history from database. It requires a access token from login.
+      """
       try:
             # request access token from authorized user
             Authorize.jwt_required()
